@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Net Worth</title>
+<meta name="theme-color" content="#0a0c0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Net Worth">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c0f;--s1:#111318;--s2:#161a20;--s3:#1d2229;
+  --ln:#2a2f38;--t1:#e8eaf0;--t2:#6b7280;
+  --g:#00e5a0;--r:#ff4d6d;--a:#f59e0b;--b:#4f8ef7;--p:#a78bfa;
+  --mono:'Courier New',monospace;
+}
+body{background:var(--bg);color:var(--t1);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh}
+.app{max-width:900px;margin:0 auto;padding:16px}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--ln)}
+.logo{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--g);letter-spacing:2px}
+.logo-sub{font-family:var(--mono);font-size:9px;color:var(--t2);letter-spacing:1px;margin-top:2px}
+.tabs{display:flex;gap:4px;background:var(--s2);border:1px solid var(--ln);border-radius:10px;padding:4px}
+.tab{padding:8px 18px;border-radius:7px;border:none;background:transparent;color:var(--t2);cursor:pointer;font-size:13px;font-weight:500;transition:all .2s}
+.tab.on{background:var(--s3);color:var(--t1)}
+.page{display:none}.page.on{display:block}
+.sec-title{font-family:var(--mono);font-size:10px;color:var(--t2);letter-spacing:2px;margin-bottom:12px;margin-top:24px}
+.sec-title:first-child{margin-top:0}
+.btn{padding:9px 16px;border-radius:8px;border:1px solid var(--ln);background:var(--s3);color:var(--t1);cursor:pointer;font-size:13px;font-weight:500;transition:all .15s}
+.btn:hover{background:var(--ln)}
+.btn-g{background:var(--g);color:#000;border-color:var(--g)}
+.btn-g:hover{opacity:.9}
+.btn-r{background:rgba(255,77,109,.12);color:var(--r);border-color:rgba(255,77,109,.3)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.card{background:var(--s2);border:1px solid var(--ln);border-radius:12px;padding:18px;margin-bottom:12px}
+.card-title{font-size:14px;font-weight:700;margin-bottom:2px}
+.card-sub{font-family:var(--mono);font-size:9px;color:var(--t2);letter-spacing:1px}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.stat{background:var(--s2);border:1px solid var(--ln);border-radius:10px;padding:14px 16px}
+.stat-lbl{font-family:var(--mono);font-size:8px;color:var(--t2);letter-spacing:1.5px;margin-bottom:6px}
+.stat-val{font-family:var(--mono);font-size:20px;font-weight:600}
+.green{color:var(--g)}.red{color:var(--r)}.amber{color:var(--a)}.blue{color:var(--b)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.stat-row{grid-template-columns:1fr 1fr}.stat-row .stat:last-child{grid-column:1/-1}}
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center;padding:16px}
+.mo.open{display:flex}
+.md{background:var(--s1);border:1px solid var(--ln);border-radius:14px;padding:22px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.md-t{font-size:16px;font-weight:700;margin-bottom:18px}
+.fg{margin-bottom:14px}
+.fl{display:block;font-size:11px;color:var(--t2);margin-bottom:5px;font-family:var(--mono);letter-spacing:.5px}
+.fi{width:100%;background:var(--s2);border:1px solid var(--ln);border-radius:8px;padding:10px 12px;color:var(--t1);font-size:13px;outline:none}
+.fi:focus{border-color:var(--g)}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fa{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.bar-wrap{height:10px;background:var(--s3);border-radius:5px;overflow:hidden;margin:6px 0}
+.bar{height:100%;border-radius:5px;transition:width .3s}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;font-family:var(--mono)}
+.pill-g{background:rgba(0,229,160,.12);color:var(--g)}
+.pill-r{background:rgba(255,77,109,.12);color:var(--r)}
+.sched-wrap{max-height:300px;overflow-y:auto;overflow-x:auto;border:1px solid var(--ln);border-radius:8px;margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:11px;font-family:var(--mono)}
+th{padding:7px 10px;text-align:right;color:var(--t2);font-size:9px;letter-spacing:1px;font-weight:600;background:var(--s3);position:sticky;top:0}
+th:first-child{text-align:left}
+td{padding:6px 10px;text-align:right;border-top:1px solid var(--ln)}
+td:first-child{text-align:left;color:var(--t2)}
+tr.last-row td{color:var(--g)}
+.empty{text-align:center;padding:40px 20px;color:var(--t2)}
+.empty-ico{font-size:28px;margin-bottom:8px}
+.empty-txt{font-size:13px}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-family:var(--mono);font-weight:600}
+.progress-wrap{height:6px;background:var(--s3);border-radius:3px;overflow:hidden}
+.progress-bar{height:100%;background:var(--g);border-radius:3px}
+select.fi option{background:var(--s2)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div>
+      <div class="logo">NET WORTH</div>
+      <div class="logo-sub">// loans &amp; investments</div>
+    </div>
+    <div class="tabs">
+      <button class="tab on" onclick="switchTab('loans')">Loans</button>
+      <button class="tab" onclick="switchTab('invest')">Investments</button>
+      <button class="tab" onclick="switchTab('savings')">Savings</button>
+      <button class="tab" onclick="switchTab('goals')">Goals</button>
+    </div>
+  </div>
+
+  <!-- LOANS PAGE -->
+  <div class="page on" id="pg-loans">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div>
+        <div style="font-size:20px;font-weight:700">Loan Payoff Planner</div>
+        <div style="font-size:12px;color:var(--t2);margin-top:2px">Full amortization schedules for all your loans</div>
+      </div>
+      <button class="btn btn-g" onclick="openLoanMo()">+ Add Loan</button>
+    </div>
+
+    <div class="stat-row" id="loan-stats">
+      <div class="stat"><div class="stat-lbl">TOTAL DEBT</div><div class="stat-val red" id="ls-total">$0.00</div></div>
+      <div class="stat"><div class="stat-lbl">MONTHLY PAYMENTS</div><div class="stat-val" id="ls-mo">$0.00</div></div>
+      <div class="stat"><div class="stat-lbl">TOTAL INTEREST</div><div class="stat-val amber" id="ls-int">$0.00</div></div>
+    </div>
+
+    <div id="loans-list"></div>
+  </div>
+
+  <!-- INVESTMENTS PAGE -->
+  <div class="page" id="pg-invest">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div>
+        <div style="font-size:20px;font-weight:700">Investments</div>
+        <div style="font-size:12px;color:var(--t2);margin-top:2px">Stocks, ETFs, crypto &amp; more</div>
+      </div>
+      <button class="btn btn-g" onclick="openInvMo()">+ Add</button>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="stat-lbl">PORTFOLIO VALUE</div><div class="stat-val green" id="iv-val">$0.00</div></div>
+      <div class="stat"><div class="stat-lbl">TOTAL GAIN/LOSS</div><div class="stat-val" id="iv-gl">+$0.00</div></div>
+      <div class="stat"><div class="stat-lbl">TOTAL RETURN</div><div class="stat-val" id="iv-ret">+0.00%</div></div>
+    </div>
+
+    <div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap" id="inv-filters">
+      <button class="btn btn-sm on" onclick="setFilter('all',this)">All</button>
+      <button class="btn btn-sm" onclick="setFilter('stock',this)">Stocks</button>
+      <button class="btn btn-sm" onclick="setFilter('etf',this)">ETFs</button>
+      <button class="btn btn-sm" onclick="setFilter('crypto',this)">Crypto</button>
+      <button class="btn btn-sm" onclick="setFilter('bond',this)">Bonds</button>
+      <button class="btn btn-sm" onclick="setFilter('other',this)">Other</button>
+    </div>
+
+    <div class="grid" id="inv-list"></div>
+  </div>
+
+  <!-- SAVINGS PAGE -->
+  <div class="page" id="pg-savings">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div>
+        <div style="font-size:20px;font-weight:700">Savings</div>
+        <div style="font-size:12px;color:var(--t2);margin-top:2px">Track your savings accounts &amp; pots</div>
+      </div>
+      <button class="btn btn-g" onclick="openSavMo()">+ Add Account</button>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-lbl">TOTAL SAVED</div><div class="stat-val green" id="sv-total">$0.00</div></div>
+      <div class="stat"><div class="stat-lbl">ACCOUNTS</div><div class="stat-val" id="sv-count">0</div></div>
+      <div class="stat"><div class="stat-lbl">AVG INTEREST</div><div class="stat-val amber" id="sv-rate">0.00%</div></div>
+    </div>
+    <div class="grid" id="sav-list"></div>
+  </div>
+
+  <!-- GOALS PAGE -->
+  <div class="page" id="pg-goals">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div>
+        <div style="font-size:20px;font-weight:700">Goals</div>
+        <div style="font-size:12px;color:var(--t2);margin-top:2px">Save toward what matters</div>
+      </div>
+      <button class="btn btn-g" onclick="openGoalMo()">+ Add Goal</button>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-lbl">TOTAL SAVED</div><div class="stat-val green" id="gl-saved">$0.00</div></div>
+      <div class="stat"><div class="stat-lbl">TOTAL TARGET</div><div class="stat-val" id="gl-target">$0.00</div></div>
+      <div class="stat"><div class="stat-lbl">COMPLETED</div><div class="stat-val amber" id="gl-done">0/0</div></div>
+    </div>
+    <div class="grid" id="goals-list"></div>
+  </div>
+
+</div>
+
+<!-- LOAN MODAL -->
+<div class="mo" id="mo-loan">
+  <div class="md">
+    <div class="md-t" id="loan-mo-title">Add Loan</div>
+    <input type="hidden" id="loan-eid">
+    <div class="fg"><label class="fl">Loan Name</label><input class="fi" id="loan-name" placeholder="SoFi Student Loan, Car Loan..."></div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Type</label>
+        <select class="fi" id="loan-type">
+          <option value="student">Student Loan</option>
+          <option value="mortgage">Mortgage</option>
+          <option value="auto">Auto Loan</option>
+          <option value="personal">Personal Loan</option>
+          <option value="credit">Credit Card</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Interest Rate (% APR)</label><input class="fi" type="number" id="loan-rate" placeholder="6.5" step="0.01" min="0"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Current Balance ($)</label><input class="fi" type="number" id="loan-bal" placeholder="15000" step="0.01"></div>
+      <div class="fg"><label class="fl">Original Loan Amount ($) <span style="color:var(--t2);font-weight:normal">(optional)</span></label><input class="fi" type="number" id="loan-orig" placeholder="e.g. 20000" step="0.01"></div>
+      <div class="fg"><label class="fl">Monthly Payment ($)</label><input class="fi" type="number" id="loan-pay" placeholder="350" step="0.01"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Extra Payment / Month ($)</label><input class="fi" type="number" id="loan-extra" placeholder="0" step="0.01" min="0"></div>
+      <div class="fg" style="display:flex;align-items:flex-end;padding-bottom:4px">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:var(--t2)">
+          <input type="checkbox" id="loan-canextra" style="width:14px;height:14px;accent-color:var(--g)"> Can pay extra when available
+        </label>
+      </div>
+    </div>
+    <div class="fa">
+      <button class="btn" onclick="closeLoanMo()">Cancel</button>
+      <button class="btn btn-g" onclick="saveLoan()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- INVESTMENT MODAL -->
+<div class="mo" id="mo-inv">
+  <div class="md">
+    <div class="md-t" id="inv-mo-title">Add Investment</div>
+    <input type="hidden" id="inv-eid">
+    <div class="fg"><label class="fl">Name</label><input class="fi" id="inv-name" placeholder="Apple Inc., Vanguard S&P 500..."></div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Type</label>
+        <select class="fi" id="inv-type">
+          <option value="stock">Stock</option>
+          <option value="etf">ETF / Index Fund</option>
+          <option value="crypto">Crypto</option>
+          <option value="bond">Bond</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Ticker (optional)</label><input class="fi" id="inv-ticker" placeholder="AAPL, VOO..."></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Shares / Units</label><input class="fi" type="number" id="inv-shares" placeholder="10" step="0.0001"></div>
+      <div class="fg"><label class="fl">Avg Buy Price ($)</label><input class="fi" type="number" id="inv-buy" placeholder="150.00" step="0.01"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Current Price ($)</label><input class="fi" type="number" id="inv-price" placeholder="175.00" step="0.01"></div>
+      <div class="fg"><label class="fl">Date Purchased</label><input class="fi" type="date" id="inv-date"></div>
+    </div>
+    <div class="fg"><label class="fl">Notes</label><input class="fi" id="inv-notes" placeholder="Long term hold..."></div>
+    <div class="fa">
+      <button class="btn" onclick="closeInvMo()">Cancel</button>
+      <button class="btn btn-g" onclick="saveInv()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var SBURL = 'https://uvqjswdfcixwktgvnzbq.supabase.co';
+var SBKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2cWpzd2RmY2l4d2t0Z3ZuemJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNDExMzEsImV4cCI6MjA4NzkxNzEzMX0.SMB9fnxmLHFNTNkJk47UFpMqlccv_wvJOYAicvGxqoI';
+
+var D = { loans: [], investments: [], savings: [], goals: [] };
+var invFilter = 'all';
+var uid = null;
+var saveTimer = null;
+
+// --- UTILS ---
+function fmtNum(n) {
+  if (isNaN(n)) return '$0.00';
+  return '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+function fmtSigned(n) {
+  return (n >= 0 ? '+' : '-') + fmtNum(n);
+}
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function uid2() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+}
+
+// --- TABS ---
+function switchTab(t) {
+  document.querySelectorAll('.tab').forEach(function(el){ el.classList.remove('on'); });
+  document.querySelectorAll('.page').forEach(function(el){ el.classList.remove('on'); });
+  event.target.classList.add('on');
+  document.getElementById('pg-' + t).classList.add('on');
+}
+
+// --- MODALS ---
+function openLoanMo(eid) {
+  document.getElementById('loan-eid').value = eid || '';
+  document.getElementById('loan-mo-title').textContent = eid ? 'Edit Loan' : 'Add Loan';
+  if (eid) {
+    var l = D.loans.find(function(x){ return x.id === eid; });
+    if (l) {
+      document.getElementById('loan-name').value = l.name || '';
+      document.getElementById('loan-type').value = l.type || 'personal';
+      document.getElementById('loan-rate').value = l.rate || '';
+      document.getElementById('loan-bal').value = l.balance || '';
+      document.getElementById('loan-pay').value = l.payment || '';
+      document.getElementById('loan-orig').value = l.original || '';
+    document.getElementById('loan-extra').value = l.extra || 0;
+      document.getElementById('loan-canextra').checked = !!(l.canextra);
+    }
+  } else {
+    ['loan-name','loan-rate','loan-bal','loan-pay','loan-orig'].forEach(function(id){ document.getElementById(id).value = ''; });
+    document.getElementById('loan-extra').value = 0;
+    document.getElementById('loan-canextra').checked = false;
+    document.getElementById('loan-type').value = 'personal';
+  }
+  document.getElementById('mo-loan').classList.add('open');
+}
+function closeLoanMo() { document.getElementById('mo-loan').classList.remove('open'); }
+
+function openInvMo(eid) {
+  document.getElementById('inv-eid').value = eid || '';
+  document.getElementById('inv-mo-title').textContent = eid ? 'Edit Investment' : 'Add Investment';
+  if (eid) {
+    var inv = D.investments.find(function(x){ return x.id === eid; });
+    if (inv) {
+      document.getElementById('inv-name').value = inv.name || '';
+      document.getElementById('inv-type').value = inv.type || 'stock';
+      document.getElementById('inv-ticker').value = inv.ticker || '';
+      document.getElementById('inv-shares').value = inv.shares || '';
+      document.getElementById('inv-buy').value = inv.buyPrice || '';
+      document.getElementById('inv-price').value = inv.currentPrice || '';
+      document.getElementById('inv-date').value = inv.date || '';
+      document.getElementById('inv-notes').value = inv.notes || '';
+    }
+  } else {
+    ['inv-name','inv-ticker','inv-shares','inv-buy','inv-price','inv-notes'].forEach(function(id){ document.getElementById(id).value = ''; });
+    document.getElementById('inv-type').value = 'stock';
+    document.getElementById('inv-date').value = '';
+  }
+  document.getElementById('mo-inv').classList.add('open');
+}
+function closeInvMo() { document.getElementById('mo-inv').classList.remove('open'); }
+
+// --- SAVE/DELETE ---
+function saveLoan() {
+  var name = document.getElementById('loan-name').value.trim();
+  if (!name) { alert('Enter a loan name'); return; }
+  var eid = document.getElementById('loan-eid').value;
+  var obj = {
+    id: eid || uid2(),
+    name: name,
+    type: document.getElementById('loan-type').value,
+    rate: parseFloat(document.getElementById('loan-rate').value) || 0,
+    balance: parseFloat(document.getElementById('loan-bal').value) || 0,
+    payment: parseFloat(document.getElementById('loan-pay').value) || 0,
+    original: parseFloat(document.getElementById('loan-orig').value) || 0,
+    extra: parseFloat(document.getElementById('loan-extra').value) || 0,
+    canextra: document.getElementById('loan-canextra').checked
+  };
+  if (eid) {
+    var i = D.loans.findIndex(function(x){ return x.id === eid; });
+    if (i >= 0) {
+      obj.payments = D.loans[i].payments || {};
+      D.loans[i] = obj;
+    } else {
+      D.loans.push(obj);
+    }
+  } else {
+    D.loans.push(obj);
+  }
+  closeLoanMo();
+  onChange();
+}
+
+function deleteLoan(id) {
+  if (!confirm('Delete this loan?')) return;
+  D.loans = D.loans.filter(function(x){ return x.id !== id; });
+  onChange();
+}
+
+function saveInv() {
+  var name = document.getElementById('inv-name').value.trim();
+  if (!name) { alert('Enter an investment name'); return; }
+  var eid = document.getElementById('inv-eid').value;
+  var obj = {
+    id: eid || uid2(),
+    name: name,
+    type: document.getElementById('inv-type').value,
+    ticker: document.getElementById('inv-ticker').value.trim().toUpperCase(),
+    shares: parseFloat(document.getElementById('inv-shares').value) || 0,
+    buyPrice: parseFloat(document.getElementById('inv-buy').value) || 0,
+    currentPrice: parseFloat(document.getElementById('inv-price').value) || 0,
+    date: document.getElementById('inv-date').value,
+    notes: document.getElementById('inv-notes').value.trim()
+  };
+  if (eid) {
+    var i = D.investments.findIndex(function(x){ return x.id === eid; });
+    if (i >= 0) D.investments[i] = obj; else D.investments.push(obj);
+  } else {
+    D.investments.push(obj);
+  }
+  closeInvMo();
+  onChange();
+}
+
+function deleteInv(id) {
+  if (!confirm('Delete this investment?')) return;
+  D.investments = D.investments.filter(function(x){ return x.id !== id; });
+  onChange();
+}
+
+// --- LOAN AMORTIZATION ---
+function calcAmort(loan) {
+  var bal = loan.balance || 0;
+  var rate = (loan.rate || 0) / 100 / 12;
+  var defaultPay = (loan.payment || 0) + (loan.extra || 0);
+  var moInt = rate > 0 ? bal * rate : 0;
+  var payments = loan.payments || {};
+
+  if (defaultPay === 0) return { growing: false, months: 0, moInt: 0, moPrin: 0, totalInt: 0, schedule: [] };
+  if (rate > 0 && defaultPay <= moInt) {
+    return { growing: true, moInt: moInt, moPrin: 0, totalInt: -1, months: -1, schedule: [] };
+  }
+
+  var b = bal, months = 0, totalInt = 0, schedule = [];
+  while (b > 0.005 && months < 600) {
+    months++;
+    var key = loan.id + '_' + months;
+    var rec = payments[key] || {};
+    // use recorded amount if paid, otherwise default
+    var actualPay = (rec.amount !== undefined) ? rec.amount : defaultPay;
+    // ensure we pay at least interest so balance doesn't grow unexpectedly in display
+    var interest = rate > 0 ? b * rate : 0;
+    var principal = Math.min(Math.max(0, actualPay - interest), b);
+    b = Math.max(0, b - principal);
+    totalInt += interest;
+    schedule.push({ n: months, interest: interest, principal: principal, balance: b, actualPay: actualPay });
+  }
+
+  var moPrin = Math.max(0, defaultPay - moInt);
+  return { growing: false, moInt: moInt, moPrin: moPrin, totalInt: totalInt, months: months, schedule: schedule };
+}
+
+// --- FILTER ---
+function setFilter(type, btn) {
+  invFilter = type;
+  document.querySelectorAll('#inv-filters .btn').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+  renderInvest();
+}
+
+// --- TOGGLE SCHEDULE ---
+function toggleSched(id) {
+  var el = document.getElementById('sched-' + id);
+  var btn = document.getElementById('sched-btn-' + id);
+  if (el.style.display === 'none') {
+    el.style.display = 'block';
+    btn.textContent = 'Hide Schedule';
+  } else {
+    el.style.display = 'none';
+    btn.textContent = 'View Full Schedule';
+  }
+}
+
+
+// --- PAYMENT TRACKING ---
+function togglePaid(el) {
+  var loanId = el.dataset.loan;
+  var n = el.dataset.n;
+  var loan = D.loans.find(function(x){ return x.id === loanId; });
+  if (!loan) return;
+  if (!loan.payments) loan.payments = {};
+  var key = loanId + '_' + n;
+  if (!loan.payments[key]) loan.payments[key] = {};
+  loan.payments[key].paid = el.checked;
+  // Update the amount input color
+  var amtInput = el.closest('tr').querySelector('input[type="number"]');
+  if (amtInput) {
+    amtInput.style.background = el.checked ? 'rgba(0,229,160,.08)' : 'var(--s3)';
+    amtInput.style.color = el.checked ? 'var(--g)' : 'var(--t1)';
+    el.closest('tr').style.background = el.checked ? 'rgba(0,229,160,.06)' : '';
+  }
+  onChange();
+}
+
+function setPaidAmt(el) {
+  var loanId = el.dataset.loan;
+  var n = parseInt(el.dataset.n);
+  var loan = D.loans.find(function(x){ return x.id === loanId; });
+  if (!loan) return;
+  if (!loan.payments) loan.payments = {};
+  var key = loanId + '_' + n;
+  if (!loan.payments[key]) loan.payments[key] = {};
+  var newAmt = parseFloat(el.value) || 0;
+  loan.payments[key].amount = newAmt;
+  // Recalculate all subsequent months based on new balance
+  // by clearing any auto-derived amounts after this month
+  // The schedule will recalculate from this point on next render
+  renderLoans();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveData, 800);
+}
+
+// --- RENDER LOANS ---
+function renderLoans() {
+  var totalBal = D.loans.reduce(function(s,l){ return s+(l.balance||0); },0);
+  var totalMo = D.loans.reduce(function(s,l){ return s+(l.payment||0)+(l.extra||0); },0);
+  var totalInt = D.loans.reduce(function(s,l){
+    var p = calcAmort(l); return s+(p.totalInt>0?p.totalInt:0);
+  },0);
+  document.getElementById('ls-total').textContent = fmtNum(totalBal);
+  document.getElementById('ls-mo').textContent = fmtNum(totalMo);
+  document.getElementById('ls-int').textContent = fmtNum(totalInt);
+
+  var TL = {student:'Student Loan',mortgage:'Mortgage',auto:'Auto Loan',personal:'Personal Loan',credit:'Credit Card',other:'Other'};
+  var el = document.getElementById('loans-list');
+
+  if (!D.loans.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-ico">&#128196;</div><div class="empty-txt">No loans yet. Add one to see your payoff plan.</div></div>';
+    return;
+  }
+
+  el.innerHTML = D.loans.map(function(loan) {
+    var p = calcAmort(loan);
+    var h = [];
+
+    h.push('<div class="card">');
+
+    // --- HEADER ---
+    h.push('<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">');
+    h.push('<div><div class="card-title">'+esc(loan.name)+'</div>');
+    h.push('<div class="card-sub">'+(TL[loan.type]||loan.type)+' &mdash; '+(loan.rate||0)+'% APR</div></div>');
+    h.push('<div style="text-align:right">');
+    h.push('<div style="font-family:var(--mono);font-size:22px;color:var(--r);font-weight:700">'+fmtNum(loan.balance||0)+'</div>');
+    h.push('<div style="font-size:9px;color:var(--t2);font-family:var(--mono)">BALANCE</div>');
+    var origAmt = loan.original || 0;
+    var owedPct = origAmt > 0 ? Math.min(100,((loan.balance||0)/origAmt)*100) : 0;
+    var owedCol = owedPct>75?'var(--r)':owedPct>40?'var(--a)':'var(--g)';
+    if (origAmt > 0) {
+      h.push('<div style="font-family:var(--mono);font-size:11px;color:'+owedCol+';margin-top:2px">'+owedPct.toFixed(0)+'% still owed</div>');
+    }
+    h.push('</div></div>');
+
+    // --- ORIGINAL LOAN PROGRESS BAR ---
+    if (origAmt > 0) {
+      var repaid = origAmt - (loan.balance||0);
+      h.push('<div style="margin-bottom:14px">');
+      h.push('<div class="bar-wrap"><div class="bar" style="width:'+(100-owedPct)+'%;background:linear-gradient(90deg,var(--g),var(--b))"></div></div>');
+      h.push('<div style="display:flex;justify-content:space-between;font-size:10px;font-family:var(--mono);color:var(--t2);margin-top:3px">');
+      h.push('<span style="color:var(--g)">'+fmtNum(repaid)+' repaid ('+(100-owedPct).toFixed(0)+'%)</span>');
+      h.push('<span>of '+fmtNum(origAmt)+' original</span>');
+      h.push('</div></div>');
+    }
+
+    // --- GROWING WARNING ---
+    if (p.growing) {
+      h.push('<div style="background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.3);border-radius:8px;padding:12px;margin-bottom:14px">');
+      h.push('<div style="font-size:13px;font-weight:700;color:var(--r);margin-bottom:5px">&#9888; Balance is growing!</div>');
+      h.push('<div style="font-size:12px;color:var(--t2)">Monthly interest: <span style="color:var(--r);font-family:var(--mono)">'+fmtNum(p.moInt)+'</span></div>');
+      h.push('<div style="font-size:12px;color:var(--t2);margin-top:3px">Minimum needed to stop: <span style="color:var(--a);font-family:var(--mono)">'+fmtNum(p.moInt+1)+'</span>/mo</div>');
+      h.push('</div>');
+    } else if (p.months > 0) {
+
+      // --- PAYOFF STATS ---
+      var pd = new Date(); pd.setMonth(pd.getMonth()+p.months);
+      var payoffStr = pd.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+      var yrs = Math.floor(p.months/12), mos = p.months%12;
+      var timeStr = (yrs>0?yrs+'y ':'')+( mos>0?mos+'m':(yrs===0?'< 1m':''));
+      var totalPay = (loan.payment||0)+(loan.extra||0);
+      var pct = totalPay>0?Math.max(1,Math.round((p.moPrin/totalPay)*100)):0;
+      var hasExtra = loan.payments ? Object.keys(loan.payments).some(function(k){
+        var r=loan.payments[k]; return r.amount!==undefined&&(r.amount-totalPay)>0.01;
+      }) : false;
+
+      h.push('<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">');
+
+      h.push('<div style="background:var(--s3);border-radius:8px;padding:10px;text-align:center">');
+      h.push('<div style="font-family:var(--mono);font-size:8px;color:var(--t2);letter-spacing:1px;margin-bottom:5px">PAYOFF DATE</div>');
+      h.push('<div style="font-family:var(--mono);font-size:12px;color:var(--g);font-weight:700">'+payoffStr+'</div>');
+      h.push('<div style="font-size:10px;color:'+(hasExtra?'var(--a)':'var(--t2)')+';margin-top:3px">'+timeStr+' away'+(hasExtra?' &#9650;':'')+'</div>');
+      h.push('</div>');
+
+      h.push('<div style="background:var(--s3);border-radius:8px;padding:10px;text-align:center">');
+      h.push('<div style="font-family:var(--mono);font-size:8px;color:var(--t2);letter-spacing:1px;margin-bottom:5px">TOTAL INTEREST</div>');
+      h.push('<div style="font-family:var(--mono);font-size:12px;color:var(--r);font-weight:700">'+fmtNum(p.totalInt)+'</div>');
+      h.push('<div style="font-size:10px;color:var(--t2);margin-top:3px">total: '+fmtNum((loan.balance||0)+p.totalInt)+'</div>');
+      h.push('</div>');
+
+      h.push('<div style="background:var(--s3);border-radius:8px;padding:10px;text-align:center">');
+      h.push('<div style="font-family:var(--mono);font-size:8px;color:var(--t2);letter-spacing:1px;margin-bottom:5px">MONTHLY PMT</div>');
+      h.push('<div style="font-family:var(--mono);font-size:12px;color:var(--a);font-weight:700">'+fmtNum(totalPay)+'</div>');
+      if (loan.extra>0) {
+        h.push('<div style="font-size:10px;color:var(--g);margin-top:3px">incl. '+fmtNum(loan.extra)+' extra</div>');
+      } else {
+        h.push('<div style="font-size:10px;color:var(--t2);margin-top:3px">per month</div>');
+      }
+      h.push('</div>');
+      h.push('</div>');
+
+      // --- PAYMENT BREAKDOWN BAR ---
+      h.push('<div style="margin-bottom:14px">');
+      h.push('<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px">');
+      h.push('<span style="color:var(--t2)">Monthly payment breakdown</span>');
+      h.push('<span style="font-family:var(--mono);color:var(--t2)">'+fmtNum(totalPay)+'/mo</span>');
+      h.push('</div>');
+      h.push('<div class="bar-wrap"><div class="bar" style="width:'+pct+'%;background:linear-gradient(90deg,var(--g),var(--b))"></div></div>');
+      h.push('<div style="display:flex;justify-content:space-between;font-size:10px;font-family:var(--mono);margin-top:4px">');
+      h.push('<span style="color:var(--g)">'+fmtNum(p.moPrin)+' principal ('+pct+'%)</span>');
+      h.push('<span style="color:var(--r)">'+fmtNum(p.moInt)+' interest ('+(100-pct)+'%)</span>');
+      h.push('</div></div>');
+
+      // --- CAN PAY EXTRA ---
+      if (loan.canextra) {
+        h.push('<div style="background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.2);border-radius:8px;padding:8px 12px;margin-bottom:14px;font-size:12px;color:var(--g)">&#10003; Can make extra payments when funds allow</div>');
+      }
+
+      // --- PAID SUMMARY BADGE ---
+      var paidCount = loan.payments ? Object.values(loan.payments).filter(function(v){return v.paid;}).length : 0;
+      var totalPaidAmt = loan.payments ? Object.values(loan.payments).filter(function(v){return v.paid;}).reduce(function(s,v){return s+(v.amount!==undefined?v.amount:totalPay);},0) : 0;
+      if (paidCount > 0) {
+        h.push('<div style="background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.2);border-radius:8px;padding:9px 12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">');
+        h.push('<span style="font-size:12px;color:var(--g)">&#10003; '+paidCount+' payment'+(paidCount>1?'s':'')+' recorded</span>');
+        h.push('<span style="font-family:var(--mono);font-size:12px;color:var(--g)">'+fmtNum(totalPaidAmt)+' paid</span>');
+        h.push('</div>');
+      }
+
+      // --- SCHEDULE TOGGLE BUTTON ---
+      h.push('<button id="sched-btn-'+loan.id+'" class="btn btn-sm" style="width:100%;margin-bottom:0" onclick="toggleSched(\''+loan.id+'\')">View Full Schedule ('+p.months+' payments)</button>');
+
+      // --- SCHEDULE ROWS (CSS grid, no table) ---
+      h.push('<div id="sched-'+loan.id+'" style="display:none;margin-top:10px">');
+
+      // Header
+      h.push('<div style="display:grid;grid-template-columns:80px 32px 1fr 1fr 1fr 1fr;gap:4px;background:var(--s3);border-radius:8px 8px 0 0;padding:7px 10px;align-items:center">');
+      h.push('<div style="font-family:var(--mono);font-size:8px;color:var(--t2);letter-spacing:1px">DATE</div>');
+      h.push('<div style="font-family:var(--mono);font-size:8px;color:var(--t2);text-align:center">✓</div>');
+      h.push('<div style="font-family:var(--mono);font-size:8px;color:var(--t2);text-align:right">AMOUNT</div>');
+      h.push('<div style="font-family:var(--mono);font-size:8px;color:var(--t2);text-align:right">INTEREST</div>');
+      h.push('<div style="font-family:var(--mono);font-size:8px;color:var(--t2);text-align:right">PRINCIPAL</div>');
+      h.push('<div style="font-family:var(--mono);font-size:8px;color:var(--t2);text-align:right">BALANCE</div>');
+      h.push('</div>');
+
+      // Scrollable body
+      h.push('<div style="max-height:300px;overflow-y:auto;border:1px solid var(--ln);border-top:none;border-radius:0 0 8px 8px">');
+      var now = new Date();
+      p.schedule.forEach(function(row) {
+        var d = new Date(now); d.setMonth(d.getMonth()+row.n);
+        var dateStr = d.toLocaleDateString('en-US',{month:'short',year:'numeric'});
+        var isLast = row.balance < 0.01;
+        var payKey = loan.id+'_'+row.n;
+        var payRec = (loan.payments&&loan.payments[payKey])||{};
+        var isPaid = !!(payRec.paid);
+        var paidAmt = payRec.amount!==undefined ? payRec.amount : totalPay;
+        var isExtra = paidAmt-totalPay > 0.01;
+        var rowBg = isLast?'rgba(0,229,160,.05)':isPaid?'rgba(0,229,160,.04)':'';
+
+        h.push('<div style="display:grid;grid-template-columns:80px 32px 1fr 1fr 1fr 1fr;gap:4px;padding:6px 10px;border-top:1px solid var(--ln);background:'+rowBg+';align-items:center">');
+
+        h.push('<div style="font-family:var(--mono);font-size:11px;color:var(--t2)">'+dateStr+'</div>');
+
+        h.push('<div style="text-align:center"><input type="checkbox"'+(isPaid?' checked':'')+' style="width:14px;height:14px;accent-color:var(--g);cursor:pointer" data-loan="'+loan.id+'" data-n="'+row.n+'" onchange="togglePaid(this)"></div>');
+
+        h.push('<div style="text-align:right"><input type="number" value="'+paidAmt.toFixed(2)+'" step="0.01" min="0"'
+          +' style="width:100%;max-width:80px;background:'+(isPaid?'rgba(0,229,160,.08)':'var(--s2)')+';border:1px solid var(--ln);border-radius:5px;padding:3px 5px;color:'+(isPaid?(isExtra?'var(--a)':'var(--g)'):'var(--t2)')+';font-family:var(--mono);font-size:11px;text-align:right"'
+          +' data-loan="'+loan.id+'" data-n="'+row.n+'" onchange="setPaidAmt(this)"></div>');
+
+        h.push('<div style="font-family:var(--mono);font-size:11px;color:var(--r);text-align:right">'+fmtNum(row.interest)+'</div>');
+
+        h.push('<div style="font-family:var(--mono);font-size:11px;color:'+(isExtra?'var(--a)':'var(--g)')+';text-align:right">'+fmtNum(row.principal)+'</div>');
+
+        h.push('<div style="font-family:var(--mono);font-size:11px;text-align:right;color:'+(isLast?'var(--g)':'var(--t1)')+'">');
+        if (isLast) { h.push('<span style="font-weight:700;color:var(--g)">PAID OFF</span>'); }
+        else { h.push(fmtNum(row.balance)); }
+        h.push('</div>');
+
+        h.push('</div>');
+      });
+
+      h.push('</div>'); // end scrollable body
+      h.push('</div>'); // end sched div
+
+    } // end else if p.months > 0
+
+    // --- BUTTONS ---
+    h.push('<div style="display:flex;gap:8px;margin-top:14px">');
+    h.push('<button class="btn btn-sm" data-id="'+loan.id+'" onclick="openLoanMo(this.dataset.id)">Edit</button>');
+    h.push('<button class="btn btn-sm btn-r" data-id="'+loan.id+'" onclick="deleteLoan(this.dataset.id)">Delete</button>');
+    h.push('</div>');
+
+    h.push('</div>'); // end card
+    return h.join('');
+  }).join('');
+}
+
+
+// --- RENDER INVESTMENTS ---
+function renderInvest() {
+  var all = D.investments || [];
+  var filtered = invFilter === 'all' ? all : all.filter(function(x){ return x.type === invFilter; });
+
+  var totalVal = all.reduce(function(s,inv){ return s + (inv.shares||0)*(inv.currentPrice||0); }, 0);
+  var totalCost = all.reduce(function(s,inv){ return s + (inv.shares||0)*(inv.buyPrice||0); }, 0);
+  var gl = totalVal - totalCost;
+  var ret = totalCost > 0 ? (gl/totalCost)*100 : 0;
+
+  document.getElementById('iv-val').textContent = fmtNum(totalVal);
+  var glEl = document.getElementById('iv-gl');
+  glEl.textContent = fmtSigned(gl);
+  glEl.className = 'stat-val ' + (gl >= 0 ? 'green' : 'red');
+  var retEl = document.getElementById('iv-ret');
+  retEl.textContent = (ret >= 0 ? '+' : '') + ret.toFixed(2) + '%';
+  retEl.className = 'stat-val ' + (ret >= 0 ? 'green' : 'red');
+
+  var TL = { stock:'Stock', etf:'ETF', crypto:'Crypto', bond:'Bond', other:'Other' };
+  var el = document.getElementById('inv-list');
+
+  if (!filtered.length) {
+    el.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-ico">&#9650;</div><div class="empty-txt">'+(invFilter==='all'?'No investments yet. Add your first one.':'No '+TL[invFilter]+' investments.')+'</div></div>';
+    return;
+  }
+
+  el.innerHTML = filtered.map(function(inv) {
+    var val = (inv.shares||0) * (inv.currentPrice||0);
+    var cost = (inv.shares||0) * (inv.buyPrice||0);
+    var gl = val - cost;
+    var ret = cost > 0 ? (gl/cost)*100 : 0;
+    var pct = totalVal > 0 ? (val/totalVal)*100 : 0;
+    var h = [];
+
+    h.push('<div class="card">');
+    h.push('<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">');
+    h.push('<div><div class="card-title">'+esc(inv.name)+'</div>');
+    if (inv.ticker) h.push('<div class="card-sub">'+esc(inv.ticker)+' &mdash; '+(TL[inv.type]||inv.type)+'</div>');
+    else h.push('<div class="card-sub">'+(TL[inv.type]||inv.type)+'</div>');
+    h.push('</div>');
+    h.push('<div style="text-align:right">');
+    h.push('<div style="font-family:var(--mono);font-size:18px;color:var(--g);font-weight:700">'+fmtNum(val)+'</div>');
+    h.push('<div class="'+(gl>=0?'pill pill-g':'pill pill-r')+'" style="margin-top:3px">'+fmtSigned(gl)+' ('+ret.toFixed(1)+'%)</div>');
+    h.push('</div></div>');
+
+    // Stats grid
+    h.push('<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px;font-size:11px;font-family:var(--mono)">');
+    h.push('<div style="background:var(--s3);border-radius:6px;padding:8px"><div style="color:var(--t2);font-size:8px;letter-spacing:1px;margin-bottom:3px">SHARES</div><div>'+inv.shares+'</div></div>');
+    h.push('<div style="background:var(--s3);border-radius:6px;padding:8px"><div style="color:var(--t2);font-size:8px;letter-spacing:1px;margin-bottom:3px">BUY PRICE</div><div>'+fmtNum(inv.buyPrice)+'</div></div>');
+    h.push('<div style="background:var(--s3);border-radius:6px;padding:8px"><div style="color:var(--t2);font-size:8px;letter-spacing:1px;margin-bottom:3px">CUR PRICE</div><div style="color:'+(inv.currentPrice>=inv.buyPrice?'var(--g)':'var(--r)')+'">'+fmtNum(inv.currentPrice)+'</div></div>');
+    h.push('</div>');
+
+    // Portfolio share bar
+    h.push('<div style="margin-bottom:10px">');
+    h.push('<div style="display:flex;justify-content:space-between;font-size:10px;font-family:var(--mono);color:var(--t2);margin-bottom:4px">');
+    h.push('<span>Portfolio share</span><span>'+pct.toFixed(1)+'%</span>');
+    h.push('</div>');
+    h.push('<div class="progress-wrap"><div class="progress-bar" style="width:'+pct+'%"></div></div>');
+    h.push('</div>');
+
+    if (inv.notes) h.push('<div style="font-size:11px;color:var(--t2);margin-bottom:10px;font-style:italic">'+esc(inv.notes)+'</div>');
+    if (inv.date) h.push('<div style="font-size:10px;color:var(--t2);font-family:var(--mono);margin-bottom:10px">Purchased: '+inv.date+'</div>');
+
+    h.push('<div style="display:flex;gap:8px">');
+    h.push('<button class="btn btn-sm" data-id="'+inv.id+'" onclick="openInvMo(this.dataset.id)">Edit</button>');
+    h.push('<button class="btn btn-sm btn-r" data-id="'+inv.id+'" onclick="deleteInv(this.dataset.id)">Delete</button>');
+    h.push('</div>');
+    h.push('</div>');
+    return h.join('');
+  }).join('');
+}
+
+function renderAll() { renderLoans(); renderInvest(); renderSavings(); renderGoals(); }
+
+
+// --- SAVINGS MODALS ---
+function openSavMo(eid) {
+  document.getElementById('sav-eid').value = eid || '';
+  document.getElementById('sav-mo-title').textContent = eid ? 'Edit Account' : 'Add Savings Account';
+  if (eid) {
+    var s = D.savings.find(function(x){ return x.id === eid; });
+    if (s) {
+      document.getElementById('sav-name').value = s.name || '';
+      document.getElementById('sav-type').value = s.type || 'other';
+      document.getElementById('sav-rate').value = s.rate || '';
+      document.getElementById('sav-bal').value = s.balance || '';
+      document.getElementById('sav-contrib').value = s.contrib || '';
+      document.getElementById('sav-notes').value = s.notes || '';
+    }
+  } else {
+    ['sav-name','sav-rate','sav-bal','sav-contrib','sav-notes'].forEach(function(id){ document.getElementById(id).value = ''; });
+    document.getElementById('sav-type').value = 'hysa';
+  }
+  document.getElementById('mo-sav').classList.add('open');
+}
+function closeSavMo() { document.getElementById('mo-sav').classList.remove('open'); }
+
+function saveSav() {
+  var name = document.getElementById('sav-name').value.trim();
+  if (!name) { alert('Enter an account name'); return; }
+  var eid = document.getElementById('sav-eid').value;
+  var obj = {
+    id: eid || uid2(),
+    name: name,
+    type: document.getElementById('sav-type').value,
+    rate: parseFloat(document.getElementById('sav-rate').value) || 0,
+    balance: parseFloat(document.getElementById('sav-bal').value) || 0,
+    contrib: parseFloat(document.getElementById('sav-contrib').value) || 0,
+    notes: document.getElementById('sav-notes').value.trim()
+  };
+  if (eid) {
+    var i = D.savings.findIndex(function(x){ return x.id === eid; });
+    if (i >= 0) D.savings[i] = obj; else D.savings.push(obj);
+  } else {
+    D.savings.push(obj);
+  }
+  closeSavMo();
+  onChange();
+}
+
+function deleteSav(id) {
+  if (!confirm('Delete this savings account?')) return;
+  D.savings = D.savings.filter(function(x){ return x.id !== id; });
+  onChange();
+}
+
+// --- GOALS MODALS ---
+function openGoalMo(eid) {
+  document.getElementById('goal-eid').value = eid || '';
+  document.getElementById('goal-mo-title').textContent = eid ? 'Edit Goal' : 'Add Goal';
+  if (eid) {
+    var g = D.goals.find(function(x){ return x.id === eid; });
+    if (g) {
+      document.getElementById('goal-name').value = g.name || '';
+      document.getElementById('goal-em').value = g.emoji || '';
+      document.getElementById('goal-target').value = g.target || '';
+      document.getElementById('goal-current').value = g.current || 0;
+      document.getElementById('goal-date').value = g.date || '';
+      document.getElementById('goal-monthly').value = g.monthly || '';
+    }
+  } else {
+    ['goal-name','goal-em','goal-target','goal-date','goal-monthly'].forEach(function(id){ document.getElementById(id).value = ''; });
+    document.getElementById('goal-current').value = 0;
+  }
+  document.getElementById('mo-goal').classList.add('open');
+}
+function closeGoalMo() { document.getElementById('mo-goal').classList.remove('open'); }
+
+function saveGoal() {
+  var name = document.getElementById('goal-name').value.trim();
+  if (!name) { alert('Enter a goal name'); return; }
+  var eid = document.getElementById('goal-eid').value;
+  var obj = {
+    id: eid || uid2(),
+    name: name,
+    emoji: document.getElementById('goal-em').value.trim() || '',
+    target: parseFloat(document.getElementById('goal-target').value) || 0,
+    current: parseFloat(document.getElementById('goal-current').value) || 0,
+    date: document.getElementById('goal-date').value,
+    monthly: parseFloat(document.getElementById('goal-monthly').value) || 0
+  };
+  if (eid) {
+    var i = D.goals.findIndex(function(x){ return x.id === eid; });
+    if (i >= 0) D.goals[i] = obj; else D.goals.push(obj);
+  } else {
+    D.goals.push(obj);
+  }
+  closeGoalMo();
+  onChange();
+}
+
+function deleteGoal(id) {
+  if (!confirm('Delete this goal?')) return;
+  D.goals = D.goals.filter(function(x){ return x.id !== id; });
+  onChange();
+}
+
+function openFundsMo(id) {
+  document.getElementById('funds-eid').value = id;
+  document.getElementById('funds-amt').value = '';
+  document.getElementById('mo-funds').classList.add('open');
+}
+function closeFundsMo() { document.getElementById('mo-funds').classList.remove('open'); }
+
+function saveFunds() {
+  var id = document.getElementById('funds-eid').value;
+  var amt = parseFloat(document.getElementById('funds-amt').value) || 0;
+  if (amt <= 0) { alert('Enter an amount'); return; }
+  var g = D.goals.find(function(x){ return x.id === id; });
+  if (g) { g.current = (g.current || 0) + amt; }
+  closeFundsMo();
+  onChange();
+}
+
+// --- RENDER SAVINGS ---
+function renderSavings() {
+  var total = D.savings.reduce(function(s,a){ return s + (a.balance||0); }, 0);
+  var totalContrib = D.savings.reduce(function(s,a){ return s + (a.contrib||0); }, 0);
+  var avgRate = D.savings.length ? D.savings.reduce(function(s,a){ return s + (a.rate||0); }, 0) / D.savings.length : 0;
+  document.getElementById('sv-total').textContent = fmtNum(total);
+  document.getElementById('sv-count').textContent = D.savings.length;
+  document.getElementById('sv-rate').textContent = avgRate.toFixed(2) + '%';
+
+  var TL = { emergency:'Emergency Fund', hysa:'High-Yield Savings', checking:'Checking', cd:'CD', vacation:'Vacation Fund', other:'Savings' };
+  var el = document.getElementById('sav-list');
+  if (!D.savings.length) {
+    el.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-ico">&#128176;</div><div class="empty-txt">No savings accounts yet. Add one to start tracking.</div></div>';
+    return;
+  }
+  el.innerHTML = D.savings.map(function(s) {
+    var monthlyInterest = (s.balance||0) * ((s.rate||0)/100/12);
+    var yearlyInterest = (s.balance||0) * ((s.rate||0)/100);
+    var pct = total > 0 ? (s.balance||0)/total*100 : 0;
+    var h = [];
+    h.push('<div class="card">');
+    h.push('<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">');
+    h.push('<div><div class="card-title">'+esc(s.name)+'</div>');
+    h.push('<div class="card-sub">'+(TL[s.type]||s.type)+(s.rate > 0 ? ' &mdash; ' + s.rate + '% APY' : '')+'</div></div>');
+    h.push('<div style="text-align:right">');
+    h.push('<div style="font-family:var(--mono);font-size:22px;color:var(--g);font-weight:700">'+fmtNum(s.balance||0)+'</div>');
+    h.push('<div style="font-size:9px;color:var(--t2);font-family:var(--mono)">BALANCE</div>');
+    h.push('</div></div>');
+
+    if (s.rate > 0) {
+      h.push('<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">');
+      h.push('<div style="background:var(--s3);border-radius:8px;padding:10px;text-align:center">');
+      h.push('<div style="font-family:var(--mono);font-size:8px;color:var(--t2);letter-spacing:1px;margin-bottom:4px">MONTHLY INTEREST</div>');
+      h.push('<div style="font-family:var(--mono);font-size:14px;color:var(--g);font-weight:600">+'+fmtNum(monthlyInterest)+'</div>');
+      h.push('</div>');
+      h.push('<div style="background:var(--s3);border-radius:8px;padding:10px;text-align:center">');
+      h.push('<div style="font-family:var(--mono);font-size:8px;color:var(--t2);letter-spacing:1px;margin-bottom:4px">YEARLY INTEREST</div>');
+      h.push('<div style="font-family:var(--mono);font-size:14px;color:var(--g);font-weight:600">+'+fmtNum(yearlyInterest)+'</div>');
+      h.push('</div>');
+      h.push('</div>');
+    }
+
+    if (s.contrib > 0) {
+      h.push('<div style="font-size:11px;color:var(--t2);margin-bottom:10px;font-family:var(--mono)">');
+      h.push('Contributing <span style="color:var(--a)">'+fmtNum(s.contrib)+'</span>/mo');
+      if (s.rate > 0) {
+        var moGrowth = (s.balance||0) * ((s.rate||0)/100/12) + s.contrib;
+        h.push(' &mdash; growing <span style="color:var(--g)">+'+fmtNum(moGrowth)+'</span>/mo total');
+      }
+      h.push('</div>');
+    }
+
+    h.push('<div style="margin-bottom:12px">');
+    h.push('<div style="display:flex;justify-content:space-between;font-size:10px;font-family:var(--mono);color:var(--t2);margin-bottom:4px">');
+    h.push('<span>Portfolio share</span><span>'+pct.toFixed(1)+'%</span>');
+    h.push('</div>');
+    h.push('<div class="progress-wrap"><div class="progress-bar" style="width:'+pct+'%"></div></div>');
+    h.push('</div>');
+
+    if (s.notes) h.push('<div style="font-size:11px;color:var(--t2);margin-bottom:10px;font-style:italic">'+esc(s.notes)+'</div>');
+
+    h.push('<div style="display:flex;gap:8px">');
+    h.push('<button class="btn btn-sm" data-id="'+s.id+'" onclick="openSavMo(this.dataset.id)">Edit</button>');
+    h.push('<button class="btn btn-sm btn-r" data-id="'+s.id+'" onclick="deleteSav(this.dataset.id)">Delete</button>');
+    h.push('</div>');
+    h.push('</div>');
+    return h.join('');
+  }).join('');
+}
+
+// --- RENDER GOALS ---
+function renderGoals() {
+  var totalSaved = D.goals.reduce(function(s,g){ return s + (g.current||0); }, 0);
+  var totalTarget = D.goals.reduce(function(s,g){ return s + (g.target||0); }, 0);
+  var done = D.goals.filter(function(g){ return (g.current||0) >= (g.target||0) && g.target > 0; }).length;
+  document.getElementById('gl-saved').textContent = fmtNum(totalSaved);
+  document.getElementById('gl-target').textContent = fmtNum(totalTarget);
+  document.getElementById('gl-done').textContent = done + '/' + D.goals.length;
+
+  var el = document.getElementById('goals-list');
+  if (!D.goals.length) {
+    el.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-ico">&#127919;</div><div class="empty-txt">No goals yet. Add your first one!</div></div>';
+    return;
+  }
+  el.innerHTML = D.goals.map(function(g) {
+    var pct = g.target > 0 ? Math.min(100, ((g.current||0) / g.target) * 100) : 0;
+    var isComplete = pct >= 100;
+    var col = isComplete ? 'var(--g)' : pct >= 60 ? 'var(--b)' : pct >= 30 ? 'var(--a)' : 'var(--r)';
+    var remaining = Math.max(0, (g.target||0) - (g.current||0));
+    var dl = g.date ? Math.ceil((new Date(g.date) - new Date()) / 864e5) : null;
+    var monthsLeft = g.monthly > 0 ? Math.ceil(remaining / g.monthly) : null;
+    var h = [];
+
+    h.push('<div class="card">');
+    h.push('<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px">');
+    h.push('<div style="font-size:28px;line-height:1;flex-shrink:0;margin-top:2px">'+(g.emoji || '&#127919;')+'</div>');
+    h.push('<div style="flex:1">');
+    h.push('<div class="card-title">'+esc(g.name)+'</div>');
+    h.push('<div class="card-sub">'+fmtNum(g.target||0)+' target'+(g.monthly ? ' &mdash; '+fmtNum(g.monthly)+'/mo' : '')+'</div>');
+    h.push('</div>');
+    h.push('<div style="font-family:var(--mono);font-size:24px;font-weight:700;color:'+col+'">'+pct.toFixed(0)+'%</div>');
+    h.push('</div>');
+
+    // Progress bar
+    h.push('<div class="bar-wrap" style="height:12px;margin-bottom:8px">');
+    h.push('<div class="bar" style="width:'+pct+'%;background:'+col+'"></div>');
+    h.push('</div>');
+    h.push('<div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--t2);margin-bottom:12px">');
+    h.push('<span style="color:var(--g)">'+fmtNum(g.current||0)+' saved</span>');
+    if (!isComplete) h.push('<span style="color:var(--r)">'+fmtNum(remaining)+' to go</span>');
+    else h.push('<span style="color:var(--g);font-weight:700">COMPLETE!</span>');
+    h.push('</div>');
+
+    // Timeline info
+    if (!isComplete) {
+      h.push('<div style="background:var(--s3);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:11px">');
+      if (dl !== null) {
+        var dlColor = dl < 0 ? 'var(--r)' : dl < 30 ? 'var(--a)' : 'var(--t2)';
+        h.push('<div style="display:flex;justify-content:space-between;margin-bottom:'+(monthsLeft ? '6px' : '0')+'">');
+        h.push('<span style="color:var(--t2)">Target date</span>');
+        h.push('<span style="font-family:var(--mono);color:'+dlColor+'">'+(dl < 0 ? 'Past due by '+Math.abs(dl)+'d' : dl+'d left')+'</span>');
+        h.push('</div>');
+      }
+      if (monthsLeft !== null) {
+        var eta = new Date(); eta.setMonth(eta.getMonth() + monthsLeft);
+        var etaStr = eta.toLocaleDateString('en-US', { month:'short', year:'numeric' });
+        h.push('<div style="display:flex;justify-content:space-between">');
+        h.push('<span style="color:var(--t2)">At '+fmtNum(g.monthly)+'/mo</span>');
+        h.push('<span style="font-family:var(--mono);color:var(--g)">Done '+etaStr+'</span>');
+        h.push('</div>');
+      }
+      h.push('</div>');
+    }
+
+    h.push('<div style="display:flex;gap:8px">');
+    h.push('<button class="btn btn-sm btn-g" data-id="'+g.id+'" onclick="openFundsMo(this.dataset.id)">+ Funds</button>');
+    h.push('<button class="btn btn-sm" data-id="'+g.id+'" onclick="openGoalMo(this.dataset.id)">Edit</button>');
+    h.push('<button class="btn btn-sm btn-r" data-id="'+g.id+'" onclick="deleteGoal(this.dataset.id)">Delete</button>');
+    h.push('</div>');
+    h.push('</div>');
+    return h.join('');
+  }).join('');
+}
+
+// --- SUPABASE SYNC ---
+function getUser() {
+  return fetch(SBURL+'/auth/v1/user', { headers:{ apikey:SBKEY, Authorization:'Bearer '+localStorage.getItem('nw_token') } })
+    .then(function(r){ return r.json(); });
+}
+
+function loadData() {
+  if (!uid) return;
+  fetch(SBURL+'/rest/v1/user_data?id=eq.'+uid, {
+    headers:{ apikey:SBKEY, Authorization:'Bearer '+localStorage.getItem('nw_token'), 'Content-Type':'application/json' }
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(rows) {
+    if (rows && rows[0] && rows[0].data) {
+      var d = rows[0].data;
+      D.loans = d.nw_loans || [];
+      D.investments = d.nw_investments || [];
+      D.savings = d.nw_savings || [];
+      D.goals = d.nw_goals || [];
+    }
+    renderAll();
+  });
+}
+
+function saveData() {
+  if (!uid) return;
+  var token = localStorage.getItem('nw_token');
+  var payload = { id: uid, data: { nw_loans: D.loans, nw_investments: D.investments, nw_savings: D.savings, nw_goals: D.goals }, updated_at: new Date().toISOString() };
+  fetch(SBURL+'/rest/v1/user_data?id=eq.'+uid, {
+    method:'PATCH', headers:{ apikey:SBKEY, Authorization:'Bearer '+token, 'Content-Type':'application/json', Prefer:'resolution=merge-duplicates' },
+    body: JSON.stringify(payload)
+  }).then(function(r){
+    if (r.status === 404 || r.status === 406) {
+      fetch(SBURL+'/rest/v1/user_data', {
+        method:'POST', headers:{ apikey:SBKEY, Authorization:'Bearer '+token, 'Content-Type':'application/json', Prefer:'resolution=merge-duplicates' },
+        body: JSON.stringify(payload)
+      });
+    }
+  });
+}
+
+function onChange() {
+  renderAll();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveData, 800);
+}
+
+// --- AUTH ---
+var authBox = null;
+function showAuth() {
+  if (authBox) return;
+  authBox = document.createElement('div');
+  authBox.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px';
+  authBox.innerHTML = '<div style="background:#161a20;border:1px solid #2a2f38;border-radius:14px;padding:28px;width:100%;max-width:380px">'
+    + '<div style="font-family:\'Courier New\',monospace;font-size:18px;font-weight:700;color:#00e5a0;letter-spacing:2px;margin-bottom:4px">NET WORTH</div>'
+    + '<div style="font-size:12px;color:#6b7280;margin-bottom:22px">Sign in to sync your data</div>'
+    + '<div style="margin-bottom:12px"><label style="display:block;font-size:11px;color:#6b7280;margin-bottom:5px">EMAIL</label>'
+    + '<input id="auth-email" type="email" placeholder="you@email.com" style="width:72px;background:#1d2229;border:1px solid #2a2f38;border-radius:8px;padding:10px 12px;color:#e8eaf0;font-size:13px;outline:none"></div>'
+    + '<div style="margin-bottom:18px"><label style="display:block;font-size:11px;color:#6b7280;margin-bottom:5px">PASSWORD</label>'
+    + '<input id="auth-pass" type="password" placeholder="password" style="width:72px;background:#1d2229;border:1px solid #2a2f38;border-radius:8px;padding:10px 12px;color:#e8eaf0;font-size:13px;outline:none"></div>'
+    + '<div style="display:flex;gap:10px">'
+    + '<button onclick="doSignIn()" style="flex:1;padding:11px;background:#00e5a0;color:#000;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">Sign In</button>'
+    + '<button onclick="doSignUp()" style="flex:1;padding:11px;background:#1d2229;color:#e8eaf0;border:1px solid #2a2f38;border-radius:8px;font-size:13px;cursor:pointer">Sign Up</button>'
+    + '</div><div id="auth-msg" style="font-size:12px;color:#ff4d6d;margin-top:10px;text-align:center"></div>'
+    + '</div>';
+  document.body.appendChild(authBox);
+}
+
+function doSignIn() {
+  var email = document.getElementById('auth-email').value.trim();
+  var pass = document.getElementById('auth-pass').value;
+  fetch(SBURL+'/auth/v1/token?grant_type=password', {
+    method:'POST', headers:{ apikey:SBKEY, 'Content-Type':'application/json' },
+    body: JSON.stringify({ email:email, password:pass })
+  }).then(function(r){ return r.json(); }).then(function(d) {
+    if (d.access_token) {
+      localStorage.setItem('nw_token', d.access_token);
+      uid = d.user.id;
+      document.body.removeChild(authBox); authBox = null;
+      loadData();
+    } else {
+      document.getElementById('auth-msg').textContent = d.error_description || 'Sign in failed';
+    }
+  });
+}
+
+function doSignUp() {
+  var email = document.getElementById('auth-email').value.trim();
+  var pass = document.getElementById('auth-pass').value;
+  fetch(SBURL+'/auth/v1/signup', {
+    method:'POST', headers:{ apikey:SBKEY, 'Content-Type':'application/json' },
+    body: JSON.stringify({ email:email, password:pass })
+  }).then(function(r){ return r.json(); }).then(function(d) {
+    if (d.id || d.access_token) {
+      document.getElementById('auth-msg').style.color = '#00e5a0';
+      document.getElementById('auth-msg').textContent = 'Account created! Check your email to confirm, then sign in.';
+    } else {
+      document.getElementById('auth-msg').textContent = d.error_description || 'Sign up failed';
+    }
+  });
+}
+
+// --- INIT ---
+window.addEventListener('load', function() {
+  var token = localStorage.getItem('nw_token');
+  if (token) {
+    getUser().then(function(u) {
+      if (u && u.id) {
+        uid = u.id;
+        loadData();
+      } else {
+        showAuth();
+      }
+    }).catch(function(){ showAuth(); });
+  } else {
+    showAuth();
+  }
+});
+</script>
+<!-- SAVINGS MODAL -->
+<div class="mo" id="mo-sav">
+  <div class="md">
+    <div class="md-t" id="sav-mo-title">Add Savings Account</div>
+    <input type="hidden" id="sav-eid">
+    <div class="fg"><label class="fl">Account Name</label><input class="fi" id="sav-name" placeholder="Emergency Fund, HYSA, Vacation..."></div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Type</label>
+        <select class="fi" id="sav-type">
+          <option value="emergency">Emergency Fund</option>
+          <option value="hysa">High-Yield Savings</option>
+          <option value="checking">Checking</option>
+          <option value="cd">CD</option>
+          <option value="vacation">Vacation Fund</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Interest Rate (% APY)</label><input class="fi" type="number" id="sav-rate" placeholder="4.5" step="0.01" min="0"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Current Balance ($)</label><input class="fi" type="number" id="sav-bal" placeholder="5000" step="0.01"></div>
+      <div class="fg"><label class="fl">Monthly Contribution ($)</label><input class="fi" type="number" id="sav-contrib" placeholder="200" step="0.01" min="0"></div>
+    </div>
+    <div class="fg"><label class="fl">Notes</label><input class="fi" id="sav-notes" placeholder="Goal, bank name..."></div>
+    <div class="fa">
+      <button class="btn" onclick="closeSavMo()">Cancel</button>
+      <button class="btn btn-g" onclick="saveSav()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- GOAL MODAL -->
+<div class="mo" id="mo-goal">
+  <div class="md">
+    <div class="md-t" id="goal-mo-title">Add Goal</div>
+    <input type="hidden" id="goal-eid">
+    <div class="fr">
+      <div class="fg"><label class="fl">Goal Name</label><input class="fi" id="goal-name" placeholder="New Car, House Down Payment..."></div>
+      <div class="fg"><label class="fl">Emoji</label><input class="fi" id="goal-em" placeholder="🎯" maxlength="2"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Target Amount ($)</label><input class="fi" type="number" id="goal-target" placeholder="10000" step="0.01"></div>
+      <div class="fg"><label class="fl">Saved So Far ($)</label><input class="fi" type="number" id="goal-current" placeholder="0" step="0.01"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Target Date</label><input class="fi" type="date" id="goal-date"></div>
+      <div class="fg"><label class="fl">Monthly Savings ($)</label><input class="fi" type="number" id="goal-monthly" placeholder="300" step="0.01"></div>
+    </div>
+    <div class="fa">
+      <button class="btn" onclick="closeGoalMo()">Cancel</button>
+      <button class="btn btn-g" onclick="saveGoal()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD FUNDS MODAL -->
+<div class="mo" id="mo-funds">
+  <div class="md" style="max-width:320px">
+    <div class="md-t">Add Funds</div>
+    <input type="hidden" id="funds-eid">
+    <div class="fg"><label class="fl">Amount to Add ($)</label><input class="fi" type="number" id="funds-amt" placeholder="100" step="0.01" min="0"></div>
+    <div class="fa">
+      <button class="btn" onclick="closeFundsMo()">Cancel</button>
+      <button class="btn btn-g" onclick="saveFunds()">Add</button>
+    </div>
+  </div>
+</div>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('./sw.js');
+  });
+}
+</script>
+</body>
+</html>
